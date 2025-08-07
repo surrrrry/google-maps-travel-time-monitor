@@ -1,0 +1,22 @@
+# Public
+requests
+click
+loguru
+pytest-xdist
+pytest
+dateparser
+holidays
+numpy
+pytz
+psutil
+emoji
+deep-translator
+sqlalchemy<=1.4.45
+pandas
+regex
+cryptography
+discord~=2.2.2
+schedule
+setuptools
+
+# Private

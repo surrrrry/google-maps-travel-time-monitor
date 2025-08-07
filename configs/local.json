@@ -1,0 +1,16 @@
+{
+  "mode": "local",
+  "secretsFilepath": null,
+  "enableEventLogging": true,
+  "enableHeartBeat": true,
+  "developerModeEnabled": true,
+  "enableExceptionLogging":  true,
+  "enabledQueryLogging": true,
+  "enableOnStart": false,
+  "rebuildTable": false,
+  "liveLoopIntervalUnit":  "minutes",
+  "liveLoopIntervalValue": 5,
+  "discordServiceLoggingEnabled": true,
+  "enableChunkServiceFunction": true,
+  "chunkServiceFunctionChunkSize": 3
+}

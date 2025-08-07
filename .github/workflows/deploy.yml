@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+env:
+    GH_PAT: ${{ secrets.GH_PAT }}
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Github CLI w/ Docker
+      run: |
+        echo $GH_PAT | docker login ghcr.io -u surrrrry --password-stdin
+    - name: Inject GH PAT into Build Image Script
+      run: |
+        sed -i 's/SPECIAL_TOKEN/${{ secrets.GH_PAT }}/g' build-image.sh
+    - name: Write SSH keys to files
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.PYRAMID_HOST_IP }} >> ~/.ssh/known_hosts
+        echo "${{ secrets.MACBOOK_AIR_PVK }}" > ~/.ssh/id_rsa
+        echo "${{ secrets.MACBOOK_AIR_PK }}" > ~/.ssh/id_rsa.pub
+        
+        echo "${{ secrets.MACBOOK_AIR_PVK }}"
+        cat ~/.ssh/id_rsa.pub
+        chmod 600 ~/.ssh/id_rsa
+    - name: Create secrets files and SCP into server
+      run: |
+        echo '${{ secrets.SURRY_SECRETS }}' >> secrets.json
+        cat secrets.json
+        ls
+        cp secrets.json pass.json
+        scp -i ~/.ssh/id_rsa pass.json root@${{ secrets.PYRAMID_HOST_IP }}:~/secrets.json
+        
+        echo test >> test.json
+        cat secrets.json > test.json
+        scp -i ~/.ssh/id_rsa test.json root@${{ secrets.PYRAMID_HOST_IP }}:~/secrets.json
+    - name: SCP deployment files into server
+      run: |
+        scp -i ~/.ssh/id_rsa -r $(pwd) root@${{ secrets.PYRAMID_HOST_IP }}:~/app
+        scp -i ~/.ssh/id_rsa start-prod-app.sh root@${{ secrets.PYRAMID_HOST_IP }}:~/
+        scp -i ~/.ssh/id_rsa build-image.sh root@${{ secrets.PYRAMID_HOST_IP }}:~/
+        scp -i ~/.ssh/id_rsa Dockerfile root@${{ secrets.PYRAMID_HOST_IP }}:~/
+    - name: SSH into server and run script
+      run: |
+        ssh -n -i ~/.ssh/id_rsa root@${{ secrets.PYRAMID_HOST_IP }} 'sh ~/start-prod-app.sh'
+    - name: Clean up
+      run: |
+        ssh -n -i ~/.ssh/id_rsa root@${{ secrets.PYRAMID_HOST_IP }} 'rm ~/start-prod-app.sh'
+        ls
