@@ -18,5 +18,5 @@ cryptography
 discord~=2.2.2
 schedule
 setuptools
+googlemaps
 
-# Private

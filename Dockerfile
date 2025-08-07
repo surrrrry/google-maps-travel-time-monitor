@@ -14,4 +14,4 @@ RUN cd app && sh install.sh
 ARG GIT_PAT
 RUN pip3 install git+https://$GIT_PAT@github.com/surrrrry/peaklib@v0.2.9
 
-CMD tenmplateservice -c /app/configs/prod.json
+CMD gmttm -c /app/configs/prod.json

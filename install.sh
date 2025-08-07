@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pip3 uninstall template-package -y
+pip3 uninstall google-maps-travel-time-monitor -y
 
 python setup.py sdist
 pip3 install dist/*.tar.gz --upgrade

@@ -9,12 +9,12 @@ INSTALL_REQUIRES = [
     'regex', 'dateparser', 'pymysql'
 ]
 
-PACKAGE_NAME = 'template_package_name'
+PACKAGE_NAME = 'google_maps_travel_time_monitor'
 EMAIL = ""
 DESCRIPTION = ""
 LICENSE = ""
 CONSOLE_SCRIPTS = [
-    "tpcli=template_package.app:main"
+    "gmttm=google_maps_travel_time_monitor.app:main"
 ]
 
 

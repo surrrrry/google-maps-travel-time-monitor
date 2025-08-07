@@ -1,19 +1,20 @@
 #! /usr/bin/env python
 
 from sqlalchemy.orm.decl_api import DeclarativeMeta
+from google_maps_travel_time_monitor import table_models
 from peaklib.service_driver import ServiceDriver
-from template_package import table_models
-from template_package import sql
+from google_maps_travel_time_monitor import sql
+import google_maps_travel_time_monitor
 from peaklib import driverutils
+from peaklib import secrets
 from peaklib import sqla
 from pathlib import Path
 from typing import Union
 from typing import List
-import template_package
 from typing import Type
 
 
-class TemplateDriver(ServiceDriver):
+class GoogleMapsTravelTimeMonitor(ServiceDriver):
 
     def __init__(self,
                  service_name: Union[str, None] = None,
@@ -70,10 +71,10 @@ class TemplateDriver(ServiceDriver):
         # self.num_upload_threads = 2
 
     def run_setup(self, verify_connectors: bool = True):
-        super(TemplateDriver, self).run_setup(verify_connectors)
+        super(GoogleMapsTravelTimeMonitor, self).run_setup(verify_connectors)
 
     def setup_database_connectors(self):
-        super(TemplateDriver, self).setup_database_connectors()
+        super(GoogleMapsTravelTimeMonitor, self).setup_database_connectors()
 
         # TODO: ADD MORE CONNECTORS AS NEEDED, BY DEFAULT SURRYDB CONNECTOR IS SET FOR LOGGING VIA SUPER
 
@@ -87,7 +88,7 @@ class TemplateDriver(ServiceDriver):
         )
 
     def get_connectors(self, ignore_unset: bool = True) -> List:
-        connectors = super(TemplateDriver, self).get_connectors(ignore_unset)
+        connectors = super(GoogleMapsTravelTimeMonitor, self).get_connectors(ignore_unset)
 
         # TODO: ADD CONNECTORS
 
@@ -101,17 +102,24 @@ class TemplateDriver(ServiceDriver):
     def sql():
         return sql
 
+    def get_google_maps_api_key(self):
+        return secrets.load_secret(
+            key='google-maps-api-key',
+            mode=self.secrets_mode,
+            secrets_file_path=self.secrets_file_path
+        )['value']
 
-def from_config(fp: Union[str, Path]) -> TemplateDriver:
+
+def from_config(fp: Union[str, Path]) -> GoogleMapsTravelTimeMonitor:
     c = driverutils.read_config(fp)
     secrets_fp = driverutils.get_secret_fp_from_config(c)
-    return TemplateDriver(
+    return GoogleMapsTravelTimeMonitor(
         secrets_mode=c['mode'],
         secrets_file_path=secrets_fp,
         event_logging_enabled=c['enableEventLogging'],
         heartbeat_enabled=c['enableHeartBeat'],
         developer_mode_enabled=c['developerModeEnabled'],
-        service_software_version=template_package.__version__,
+        service_software_version=google_maps_travel_time_monitor.__version__,
         exception_logging_enabled=c['enableExceptionLogging'],
         query_logging_enabled=c['enabledQueryLogging'],
         on_start_enabled=c['enableOnStart'],

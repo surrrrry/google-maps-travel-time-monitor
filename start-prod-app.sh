@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME=templateserviceimagename
+IMAGE_NAME=googlemapstraveltimemonitor
 docker rm -f $IMAGE_NAME || true
 docker rmi -f $IMAGE_NAME ||  true
 sh build-image.sh
