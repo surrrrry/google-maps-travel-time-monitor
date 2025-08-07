@@ -1,0 +1,16 @@
+{
+  "mode": "local",
+  "secretsFilepath": "app/secrets/secrets.json",
+  "enableEventLogging": true,
+  "enableHeartBeat": true,
+  "developerModeEnabled": false,
+  "enableExceptionLogging":  true,
+  "enabledQueryLogging": true,
+  "enableOnStart": true,
+  "rebuildTable": false,
+  "liveLoopIntervalUnit":  "minutes",
+  "liveLoopIntervalValue": 5,
+  "discordServiceLoggingEnabled": true,
+  "enableChunkServiceFunction": true,
+  "chunkServiceFunctionChunkSize": 3
+}
